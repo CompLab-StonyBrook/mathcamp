@@ -1,0 +1,51 @@
+%=================================================================
+%				preamble
+%=================================================================
+\documentclass[11pt,letterpaper]{book}
+
+\newcommand{\theauthor}{Thomas Graf}
+\newcommand{\lastname}{Graf}
+\newcommand{\university}{Stony Brook University}	
+\newcommand{\emailaddress}{mathcamp@thomasgraf.net}
+\newcommand{\coursename}{Mathematics Camp}
+\newcommand{\semester}{Summer 2016}
+\newcommand{\thetitle}{\texorpdfstring{%
+            {\Huge \coursename}\\
+            \semester}%
+            {\coursename\ [\semester]}}
+\newcommand{\thekeywords}{}
+\newcommand{\thedate}{}
+
+\usepackage{mypackages}
+\usepackage{mycommands}
+
+
+%=================================================================
+%			title format
+%=================================================================
+\author{\theauthor}
+\title{\thetitle}
+\date{\thedate}
+
+%=================================================================
+%			content
+%=================================================================
+% \includeonly{./tex/strictlylocal,./tex/sl-mathematics,./tex/sl-alternatives}
+
+\pagestyle{empty}
+\begin{document}
+% \maketitle
+\raggedbottom
+% \pagenumbering{Roman}
+% \tableofcontents
+% \clearpage
+
+\pagestyle{fancy}
+% \include{./tex/syllabus}
+\pagenumbering{arabic}
+
+\include{./tex/fsa}
+
+\bibliographystyle{./bib/linquiry3}
+\bibliography{./bib/universal}
+\end{document}

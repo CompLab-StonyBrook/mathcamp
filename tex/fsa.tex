@@ -1,0 +1,469 @@
+\chapter*{\texorpdfstring{\color{brown!95}Automata Theory for Language}{Automata Theory for Language}}
+\label{cha:fsa}
+% \setcounter{page}{1}
+
+\fcolorbox{brown!25}{brown!25}{%
+    \centering
+    \begin{tabular}{ll}
+        \textbf{Name:} Thomas Graf &
+        \textbf{Email:} \href{mailto:mathcamp@thomasgraf.net}{mathcamp@thomasgraf.net}\\
+        \textbf{Course Website:} \href{http://mathcamp.thomasgraf.net} {mathcamp.thomasgraf.net} &
+        \textbf{Personal Website:} \href{http://thomasgraf.net}{thomasgraf.net}
+    \end{tabular}
+}
+
+\section{Language as a Mathematical Problem}
+
+Every language follows certain rules of grammar.
+I do not mean the usual grammar-nazi malarkey like ``Do not split infinitives! Do not strand prepositions!''.
+Rather, there are words and sentences that are correct, and others that have something wrong with them.
+
+\begin{examplebox}
+    Consider the English word \emph{denaturalization}.
+    It is built up from discrete parts:
+    %
+    \begin{enumerate}
+        \item nature
+        \item nature + al = natural
+        \item natural + ize = naturalize
+        \item de + naturalize = denaturalize
+        \item denaturalize + ation = denaturalization
+    \end{enumerate}
+    %
+    % We could also write
+    % %
+    % \begin{center}
+    %     (de + ((nature + al) + ize)) + ation = denaturalization
+    % \end{center}
+    %
+    No other order of these parts produces a good word of English:
+    
+    \smallskip
+    \noindent
+    \emph{denaturizalation}, \emph{ationalizenaturde}, \emph{naturalizedeation}, \ldots
+\end{examplebox}
+%
+\begin{homework}
+    How many combinations are mathematically possible?
+\end{homework}
+%
+This restriction to just a tiny fraction of all conceivable patterns also occurs with sentences.
+
+\begin{examplebox}
+    The words in the English sentence \emph{These two former presidents seem exhausted} can only be arranged in this order, none of the other 719 combinations are possible (unless you're Yoda).
+\end{examplebox}
+
+That's quite surprising if you think about it.
+Many questions immediately come to mind:
+%
+\begin{itemize}
+    \item[\bfseries\color{brown} Q1] Are there languages that allow all possible combinations? 
+    \item[\bfseries\color{brown} A1] No, there aren't.
+        Languages differ in the restrictions they put on words and sentences, but every language allows only a tiny fraction of the possible patterns.\\
+
+    \item[\bfseries\color{brown} Q2] So why are there are no languages that allow all combinations?
+    \item[\bfseries\color{brown} A2] Excellent question, we'll see the answer at the end.\\
+
+    \item[\bfseries\color{brown} Q3] If languages use different restrictions, how different are those restrictions?
+        For instance, can a language require that words are ordered by length?
+    \item[\bfseries\color{brown} A3] Linguists have studied thousands of languages and have determined that their restrictions are very similar.
+        Not a single language does odd things like ordering words by length.
+        We'll see later why this is the case.
+\end{itemize}
+
+Just like any other cognitive ability (seeing, hearing, calculating, learning, \ldots), language involves the human brain.
+So there must be some cognitive mechanism in our brains that allows us to produce correct forms while avoiding incorrect ones.
+Looking at neurons and synapses won't get us far, the brain is just too complicated.
+Instead, we will use math to model this cognitive mechanism.
+
+\section{Graphs for Language: Finite-State Automata}
+
+Our mathematical model are \emph{finite-state automata} (FSA), which are a special case of labeled graphs.
+Here is a simple example of an automaton representing \emph{denationalization}:
+%
+\begin{center}
+    \begin{tikzpicture}
+        \node[state,initial] (0) {0};
+        \foreach \New/\Old in {%
+            1/0,
+            2/1,
+            3/2,
+            4/3}
+            \node[state] (\New) [right=of \Old] {\New};
+        \node[state,accepting] (5) [right=of 4] {5};
+
+        \foreach \Source/\Target/\Label in {%
+            0/1/de,
+            1/2/nature,
+            2/3/al,
+            3/4/ize,
+            4/5/ation}
+            \path[->] (\Source) edge node [above] {\Label} (\Target);
+    \end{tikzpicture}
+\end{center}
+%
+\begin{itemize}
+    \item The circles are the vertices of the graph, which are called \emph{states}.
+    \item The \emph{arcs} connecting the states all must have a label.
+    \item The \emph{start} arrow indicates the beginning point of the automaton, called the \emph{initial state}.
+    \item The double circled state is a \emph{final state}.
+        It marks the end point of the automaton.
+\end{itemize}
+
+An FSA can be used to succinctly describe words and sentences.
+Every path through the automaton that takes you from an initial state to a final state represents a well-formed structure.
+In the automaton above, there is only one such path, which takes us from 0 to 1, then to 2, 3, 4, and finally 5.
+But automata can have multiple paths through them.
+%
+\begin{examplebox}
+    Besides \emph{denaturalization}, English also has the words \emph{nature}, \emph{natural}, \emph{naturalize}, \emph{denaturalize}, and \emph{naturalization}.
+    We can modify the previous automaton so that it also allows these other forms. 
+    Let's do this step by step.
+
+    First we want to allow words to also end with \emph{nature}, \emph{al}, and \emph{ize}, so we make the states that are reached through those arcs final.
+    %
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state,initial] (0) {0};
+            \node[state] [right=of 0] {1};
+            \foreach \New/\Old in {%
+                2/1,
+                3/2,
+                4/3,
+                5/4}
+                \node[state,accepting] (\New) [right=of \Old] {\New};
+
+            \foreach \Source/\Target/\Label in {%
+                0/1/de,
+                1/2/nature,
+                2/3/al,
+                3/4/ize,
+                4/5/ation}
+                \path[->] (\Source) edge node [above] {\Label} (\Target);
+        \end{tikzpicture}
+    \end{center}
+    %
+    But every path must still start with \emph{de}, so the automaton does not allow the patterns \emph{nature}, \emph{natural}, or \emph{naturalize}.
+    To fix this, we make 1 an initial state, too.
+    %
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state,initial] (0) {0};
+            \node[state,initial] (1) [below=of 0] {1};
+            \foreach \New/\Old in {%
+                2/1,
+                3/2,
+                4/3,
+                5/4}
+                \node[state,accepting] (\New) [right=of \Old] {\New};
+
+            \foreach \Source/\Target/\Label in {%
+                1/2/nature,
+                2/3/al,
+                3/4/ize,
+                4/5/ation}
+                \path[->] (\Source) edge node [above] {\Label} (\Target);
+            \path[->] (0) edge node[right] {de} (1);
+        \end{tikzpicture}
+    \end{center}
+    %
+    But this automaton is too general, it also allows patterns like \emph{denature} or \emph{denatural}.
+    This is a little tricker to fix: we add a few more states to keep track of the fact that after \emph{de}, the first final state can only be one reached by \emph{ize}.
+    %
+    \begin{center}
+        \begin{tikzpicture}
+            \node[state,initial] (0) {0};
+
+            % upper part
+            \foreach \New/\Old in {%
+                1'/0,
+                2'/1',
+                3'/2'%
+                }
+                \node[state] (\New) [right=of \Old] {\New};
+
+            % lower part
+            \node[state,initial] (1) [below=of 0] {1};
+            \foreach \New/\Old in {%
+                2/1,
+                3/2,
+                4/3,
+                5/4%
+                }
+                \node[state,accepting] (\New) [right=of \Old] {\New};
+
+            \foreach \Source/\Target/\Label in {%
+                1/2/nature,
+                2/3/al,
+                3/4/ize,
+                4/5/ation,
+                0/1'/de,
+                1'/2'/nature,
+                2'/3'/al%
+                }
+                \path[->] (\Source) edge node [above] {\Label} (\Target);
+            \path[->] (3') edge node[right] {ize} (4);
+        \end{tikzpicture}
+    \end{center}
+    %
+    When you now try all possible paths from an initial state to a final state, you'll see that they are exactly \emph{denaturalize}, \emph{denaturalization}, \emph{nature}, \emph{natural}, \emph{naturalize}, and \emph{naturalization}.
+\end{examplebox}
+%
+FSAs can be much more complex than this.
+As long as the number of states is finite, pretty much any graph you can imagine is an FSA\@.
+You can have multiple arcs leaving a node, multiple arcs leading to the same node, or arcs that lead back to a previous node, possibly even the one they came from (\emph{loops}).
+That is to say, you can have convoluted automata like the one below:
+%
+\begin{center}
+    \begin{tikzpicture}
+        \node[state,initial] (0) {0};
+        \node[state] (1) [right=of 0] {1};
+        \node[state,accepting] (2) [above=4em of 1] {2};
+        \node[state] (3) [right=8em of 1] {3};
+
+        \path[->] (0) edge [bend left=65]  node [above] {John} (1)
+                      edge                 node [above] {Mary} (1)
+                      edge [bend right=65] node [below] {Bill} (1)
+                  (1) edge                 node [right] {left} (2)
+                      edge [bend right=20] node [below] {thinks} (3)
+                  (3) edge [bend right=60] node [above] {John} (1)
+                  (3) edge [bend right=20] node [above] {Mary} (1)
+                  (3) edge [bend left=60]  node [below] {Bill} (1);
+    \end{tikzpicture}
+\end{center}
+
+\medskip
+\begin{homework}
+    What collection of sentences is described by the automaton above?
+\end{homework}
+
+\begin{homework}
+    Your grandfather's father is your \emph{great grandfather}, whose father is your \emph{great great grandfather}, whose father is your \emph{great great great grandfather}, and so on.
+    Try to write an FSA that captures all those patterns, and only those.
+\end{homework}
+%
+\begin{homework}
+    Of course we also have \emph{great grandmother}, \emph{great great grandmother}, and so on.
+    How should the automaton from the previous example be modified to also allow these words?
+\end{homework}
+%
+\begin{homework}
+    Obviously \emph{I like myself} is a sentence of English.
+    Somewhat less obviously, \emph{I like myself and myself} is also a sentence of English.
+    Imagine the following exchange:
+
+    \smallskip
+    \noindent
+    \textbf{Mary:} John, you're such a misanthropist.
+    Are there even two people that you like?\\
+    \smallskip
+    \textbf{John:} Sure! I like myself and myself.
+    
+    \smallskip
+    \noindent
+    If Mary asks for three people, John can sarcastically reply \emph{I like myself and myself and myself}, and so on for any number.
+    Write an FSA that allows all sentences of the form \emph{I like myself}, \emph{I like myself and myself}, \emph{I like myself and myself and myself}, and so on.
+    The automaton should not allow any other sentences.
+\end{homework}
+%
+\begin{homework}
+    Pretty much any proper name of English can be substituted in the \emph{I like myself} sentences above.
+    If we ignore all proper names except \emph{John} and \emph{Mary}, then we can also get patterns like \emph{I like John}, \emph{I like Mary}, \emph{I like John and Mary}, \emph{I like myself and John}, \emph{I like myself and Mary and Mary}, and so on.
+    Modify the FSA from the previous exercise so that it also allows these patterns.
+\end{homework}
+
+
+\section{The Limits of Finite-State Automata (aka the Hard Part)}
+
+FSAs are fairly powerful devices, and they have found many applications in the real world.
+They control elevators, help biologists with genome sequencing, give you word suggestions when you write a text message, and are even involved in the automatic creation of subtitles for Youtube videos.
+Tons of technology uses FSAs, including language technology.
+
+But FSAs cannot do everything.
+There is a very strict bound on the complexity of the patterns they can handle.
+Remember that we noticed that
+%
+\begin{enumerate}
+    \item no language allows words or parts of words to be freely arranged, and
+    \item no language requires words to be linearly ordered by their length.
+\end{enumerate}
+%
+Both properties follow from a crucial limitation of FSAs, which is expressed by the \emph{Myhill Nerode Theorem}.
+
+Before we state the theorem, let us think about how FSAs actually work.
+In particular, what do the states stand for?
+Suppose you have taken a path that leads to state $1$ in the convoluted automaton from the previous section.
+How can you continue to get a well-formed pattern?
+Well, by taking any path that leads you from $1$ to a final state.
+There may be multiple paths to choose from, but anyone will do.
+It does not matter how you actually got into $1$.
+Whether you came from $0$ to $1$ via \emph{John}, \emph{Mary}, or \emph{Bill} is completely irrelevant, the only thing that matters is that you are in state $1$ now and may take any path that gets you from $1$ to $2$.
+%
+\begin{description}
+    \item[Crucial Insight 1]
+        If you have paths that take you from an initial state to the same state, then those paths can be continued in exactly the same fashion towards a final state.
+\end{description}
+
+FSAs have only finitely many states.
+Suppose we have some pattern, and we compare all paths that could possibly arise in that pattern.
+We put two paths in the same bin if they can be continued in exactly the same fashion.
+Then the pattern can be handled by an FSA only if we end up with a finite number of distinct bins.
+%
+\begin{examplebox}
+    Consider the pattern \emph{grandfather}, \emph{great grandfather}, \emph{great great grandfather}, and so on.
+    If the pattern starts with \emph{grandfather}, then there is nothing else that can be added, so there are no continuation paths at all.
+    For \emph{great}, one possible continuation path is \emph{grandfather}, producing \emph{great grandfather}.
+    But we could also continue with \emph{great grandfather}, \emph{great great grandfather}, and so on.
+    Here's a table:
+    %
+    \begin{center}
+        \begin{tabular}{rl}
+            \toprule
+            \textbf{Incoming Path} & \textbf{Continuation Paths}\\
+            \midrule
+            grandfather & ---\\
+            great & grandfather, great grandfather, \ldots\\
+            great great & grandfather, great grandfather, \ldots\\
+            great great great & grandfather, great grandfather, \ldots\\
+            $\vdots$
+            \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    %
+    So there's only two bins for paths.
+    One is for \emph{grandfather}, which cannot be continued.
+    The other one is for any path that starts with \emph{great}, as they can all be continued by an arbitrary number of \emph{great}s followed by \emph{grandfather}.
+    Since we only have two bins, the pattern can be handled by an FSA\@.
+\end{examplebox}
+
+\begin{description}
+    \item[Crucial Insight 2]
+    A pattern can be captured by an FSA only if its paths can be classified into finitely many bins.
+\end{description}
+
+The Myhill-Nerode theorem is simply a more precise formulation of these two insights.
+It allows us to explain the two properties of linguistic patterns we observed earlier.
+
+\begin{examplebox}[No Free Ordering]
+    Every language has sentences like English \emph{And John slept and Mary yawned and Bill cooked and \ldots}.
+    This is an FSA-pattern.
+
+    If the words in these sentences could be freely arranged, this would give us many new sentences, including those where we first have all instances of \emph{and}, then the proper names, and then the \emph{verbs}.
+    We can once again analyze the paths in the form of a table.
+    For simplicity, let us represent all proper names as N and all verbs as V\@. 
+    %
+    \begin{center}
+        \begin{tabular}{rl}
+            \toprule
+            \textbf{Incoming Path} & \textbf{Continuation Paths}\\
+            \midrule
+            and & N V, and N N V V, \ldots\\
+            and and & N N V V, and N N N V V V, \ldots\\
+            and and and & N N N V V V, and N N N N V V V V\ldots
+            \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    %
+    As you can see, no two rows in the table have the same continuation paths.
+    Since there is upper bound on how many instances of \emph{and} occur at the beginning of a sentence, we do not get a finite number of distinct bins for the path.
+    Hence this pattern cannot be created by any FSA, no matter how large and complicated it is.
+   
+    Any FSA that tries to produce this pattern will eventually make mistakes and end up with the wrong number of names or verbs, for instance, \emph{and and and John Mary slept yawned cooked ate}.
+    Changing the order of the words has made the original FSA-pattern too hard for FSAs.
+\end{examplebox}
+
+\begin{examplebox}[No Ordering by Length]
+    Now suppose that we want to order the words in a sentence by length.
+    We already saw that English contains the words \emph{grandfather}, \emph{great grandfather}, \emph{great great grandfather}, and so on.
+    Even though these are spelled as separated words, one can show that each one is actually one large word.
+    For the sake of clarity, let us use an underscore instead of space for these words.
+    Among the sentences of English, we find the pattern \emph{My grandfather likes his great\_grandfather}, \emph{My great\_grandfather likes his great\_great\_grandfather}, and so on.
+    Ordered by lengths, these sentences would be \emph{my his likes grandfather great\_grandfather}, \emph{my his likes great\_grandfather great\_great\_grandfather}, \ldots
+
+    Once again we draw a table to compare the paths.
+    We skip the paths \emph{my}, \emph{my his}, and \emph{my his likes}, as they do not matter for the argument.
+    %
+    \begin{center}
+        \begin{tabular}{rl}
+            \toprule
+            \textbf{Incoming Path} & \textbf{Continuation Paths}\\
+            \midrule
+            my his likes grandfather & great\_grandfather\\
+            my his likes great\_grandfather & great\_great\_grandfather\\
+            my his likes great\_great\_grandfather & great\_great\_great\_grandfather\\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    %
+    We have the same problem as before: each row has different continuation paths, so we end up with infinitely many bins and the pattern cannot be captured by an FSA\@.
+    Any attempt to model the pattern with an FSA will also produce sentences of the form \emph{my his likes great$^n$ grandfather great$^m$ grandfather}, $m < n$.
+\end{examplebox}
+
+We have accomplished something that few people would consider possible: we have studied language from a mathematical perspective, and we were able to explain properties that are shared by all human languages by purely mathematical means.
+
+\bigskip
+\fcolorbox{brown!25}{brown!25}{%
+    \textbf{The Take Home Message.\quad}
+    Mathematics explains language!
+}
+
+\bigskip
+\begin{homework}
+    Word structure indeed seems to be fully captured by FSAs.
+    But there are ways to show that the structure of English sentences is more complicated then what FSAs can handle.
+    Do you have an idea what the argument might be?
+    
+    \smallskip
+    \textbf{Hint:} The sentences below play a crucial role.
+    %
+        \begin{itemize}
+            \item A man left.
+            \item A man that a woman saw left.
+            \item A man that a woman that a man saw saw left.
+        \end{itemize}
+\end{homework}
+
+\section{I Wanna Learn More!}
+
+Cool, here's a few pointers.
+If you have any questions, just shoot me a line!
+
+\begin{itemize}
+    \item \textbf{Automata Theory}
+        \begin{itemize}
+            \item \emph{Introduction to the Theory of Computation}\\
+                undergraduate, computer science
+            \item Michael Sipser. 2012. 3rd edition.\\
+                \emph{Introduction to the Theory of Computation}. (yep, that's the same name)
+
+                \smallskip
+                \emph{Pro tip:} The 2nd edition is almost the same and used copies are much cheaper.
+                A decent scan can easily be found on the first Google page, I'm not sure about its legality.
+        \end{itemize}
+    \item \textbf{Computational Linguistics}
+        \begin{itemize}
+            \item \emph{Language and Technology}\\
+                undergraduate, linguistics
+            \item \emph{Computational Linguistics}\\
+                undergraduate, linguistics
+            \item \emph{Natural Language Processing}\\
+                undergraduate, computer science
+            \item over 10 graduate-level courses
+            \item Markus Dickinson, Chris Brew, and Detmar Meurers. 2012.\\
+                \emph{Language and Computers}.
+
+                \smallskip
+                Used copies are available for 10 bucks on Amazon.
+        \end{itemize}
+    \item \textbf{Language from a Formal and Cognitive Perspective}
+        \begin{itemize}
+            \item Lecture notes for my graduate-level course Computational Linguistics: \href{http://lin637.thomasgraf.net}{lin637.thomasgraf.net}
+            \item Steven Pinker. \emph{The Language Instinct: How the Mind Creates Language}.
+        \end{itemize}
+    \item \textbf{The Human Mind as a Computer}
+        \begin{itemize}
+            \item Douglas Hofstadter. \emph{Gödel, Escher, Bach: An Eternal Golden Braid}.
+        \end{itemize}
+\end{itemize}
