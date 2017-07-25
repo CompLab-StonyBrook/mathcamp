@@ -129,7 +129,7 @@
 %=================================================================
 %		packages that need to be loaded last
 %=================================================================
-\usepackage[letterpaper, top=2cm, bottom=2.5cm, left=2cm, right=6cm]{geometry}
+\usepackage[letterpaper, top=2cm, bottom=2.5cm, left=4cm, right=4cm]{geometry}
 \usepackage{fancyhdr}
 
 \makeatletter
@@ -161,9 +161,9 @@
 % define the page headers for everything but the front page;
 % first we remove the standard headers and footers
 \fancyhf{}
-\fancyheadoffset[RO,LE]{\marginparsep+\marginparwidth}
+\fancyheadoffset[LO,RE]{4em}
 \fancyhead[C]{\HeaderFontSize \lastname\ - \coursename, \semester}
-\fancyhead[RO,LE]{\bfseries \thepage}
+\fancyhead[LO,RE]{\bfseries \thepage}
 
 \fancypagestyle{plain}{
 	\fancyhf{}
