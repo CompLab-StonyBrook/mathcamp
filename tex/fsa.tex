@@ -30,12 +30,6 @@ Rather, there are words and sentences that are correct, and others that have som
         \item denaturalize + ation = denaturalization
     \end{enumerate}
     %
-    % We could also write
-    % %
-    % \begin{center}
-    %     (de + ((nature + al) + ize)) + ation = denaturalization
-    % \end{center}
-    %
     No other order of these parts produces a good word of English:
     
     \smallskip
@@ -46,40 +40,47 @@ Rather, there are words and sentences that are correct, and others that have som
 \begin{homework}
     How many combinations are mathematically possible?
 \end{homework}
+
+% This restriction to just one order is quite surprising if you think about it.
+% In sentences, we can arrange things much more freely:
+% %
+% \begin{examplebox}
+%     Even in a simple sentence like \emph{Sue and Mary did not meet all the boys yesterday} we can change the order of words quite a bit:
+%     %
+%     \begin{enumerate}
+%         \item Sue and Mary did not meet all the boys yesterday.
+%         \item Mary and Sue did not meet all the boys yesterday.
+%         \item All the boys, Mary and Sue did not meet yesterday.
+%         \item All the boys, Mary and Sue did not yesterday meet.
+%         \item The boys, Mary and Sue did not all meet yesterday.
+%         \item Yesterday, Mary and Sue did not meet all the boys.
+%         \item \ldots
+%     \end{enumerate}
+%     %
+%     Admittedly, many orders are still impossible, though:
+%     %
+%     \begin{enumerate}
+%         \item Sue not meet yesterday did Mary the all boys.
+%         \item Sue Mary and did not meet all the boys yesterday.
+%         \item Yesterday the boys, Mary and Sue did not all meet.
+%         \item The boys, Mary and Sue did not meet all yesterday.
+%     \end{enumerate}
+% \end{examplebox}
 %
-This restriction to just a tiny fraction of all conceivable patterns also occurs with sentences.
+We see, then, that there must be a very strict system of rules that determines the order in which parts of a word may appear.
+What can we say about this rule system?
+Can we study it just like, say, the laws that determine how atoms combine into molecules?
 
-\begin{examplebox}
-    The words in the English sentence \emph{These two former presidents seem exhausted} can only be arranged in this order, none of the other 719 combinations are possible (unless you're Yoda).
-\end{examplebox}
-
-That's quite surprising if you think about it.
-Many questions immediately come to mind:
-%
-\begin{itemize}
-    \item[\bfseries\color{brown} Q1] Are there languages that allow all possible combinations? 
-    \item[\bfseries\color{brown} A1] No, there aren't.
-        Languages differ in the restrictions they put on words and sentences, but every language allows only a tiny fraction of the possible patterns.\\
-
-    \item[\bfseries\color{brown} Q2] So why are there are no languages that allow all combinations?
-    \item[\bfseries\color{brown} A2] Excellent question, we'll see the answer at the end.\\
-
-    \item[\bfseries\color{brown} Q3] If languages use different restrictions, how different are those restrictions?
-        For instance, can a language require that words are ordered by length?
-    \item[\bfseries\color{brown} A3] Linguists have studied thousands of languages and have determined that their restrictions are very similar.
-        Not a single language does odd things like ordering words by length.
-        We'll see later why this is the case.
-\end{itemize}
-
-Just like any other cognitive ability (seeing, hearing, calculating, learning, \ldots), language involves the human brain.
-So there must be some cognitive mechanism in our brains that allows us to produce correct forms while avoiding incorrect ones.
-Looking at neurons and synapses won't get us far, the brain is just too complicated.
-Instead, we will use math to model this cognitive mechanism.
+One strategy would be to look at the human brain.
+After all, language must involve some kind of brain mechanisms that allow us to produce correct forms while avoiding incorrect ones.
+But research in \emph{neurolinguistics} has shown that this approach won't get us very far --- the brain is just too complicated to be studied this way.
+Instead, we need a more abstract model of these brain mechanisms.
+And math allows us to do just that!
 
 \section{Graphs for Language: Finite-State Automata}
 
 Our mathematical model are \emph{finite-state automata} (FSA), which are a special case of labeled graphs.
-Here is a simple example of an automaton representing \emph{denationalization}:
+Here is a simple example of an automaton representing \emph{denaturalization}:
 %
 \begin{center}
     \begin{tikzpicture}
@@ -106,7 +107,7 @@ Here is a simple example of an automaton representing \emph{denationalization}:
     \item The circles are the vertices of the graph, which are called \emph{states}.
     \item The \emph{arcs} connecting the states all must have a label.
     \item The \emph{start} arrow indicates the beginning point of the automaton, called the \emph{initial state}.
-    \item The double circled state is a \emph{final state}.
+    \item The doubly circled state is a \emph{final state}.
         It marks the end point of the automaton.
 \end{itemize}
 
@@ -114,10 +115,19 @@ An FSA can be used to succinctly describe words and sentences.
 Every path through the automaton that takes you from an initial state to a final state represents a well-formed structure.
 In the automaton above, there is only one such path, which takes us from 0 to 1, then to 2, 3, 4, and finally 5.
 But automata can have multiple paths through them.
-%
+
 \begin{examplebox}
-    Besides \emph{denaturalization}, English also has the words \emph{nature}, \emph{natural}, \emph{naturalize}, \emph{denaturalize}, and \emph{naturalization}.
-    We can modify the previous automaton so that it also allows these other forms. 
+    Besides \emph{denaturalization}, English also has the words
+     
+    \begin{itemize}
+        \item \emph{nature},
+        \item \emph{natural},
+        \item \emph{naturalize},
+        \item \emph{denaturalize},
+        \item \emph{naturalization}.
+    \end{itemize}
+     
+    We can modify the previous automaton so that it also allows for these other forms. 
     Let's do this step by step.
 
     First we want to allow words to also end with \emph{nature}, \emph{al}, and \emph{ize}, so we make the states that are reached through those arcs final.
@@ -142,7 +152,7 @@ But automata can have multiple paths through them.
                 \path[->] (\Source) edge node [above] {\Label} (\Target);
         \end{tikzpicture}
     \end{center}
-    %
+    
     But every path must still start with \emph{de}, so the automaton does not allow the patterns \emph{nature}, \emph{natural}, or \emph{naturalize}.
     To fix this, we make 1 an initial state, too.
     %
@@ -166,7 +176,7 @@ But automata can have multiple paths through them.
             \path[->] (0) edge node[right] {de} (1);
         \end{tikzpicture}
     \end{center}
-    %
+    
     But this automaton is too general, it also allows patterns like \emph{denature} or \emph{denatural}.
     This is a little tricker to fix: we add a few more states to keep track of the fact that after \emph{de}, the first final state can only be one reached by \emph{ize}.
     %
@@ -206,9 +216,18 @@ But automata can have multiple paths through them.
         \end{tikzpicture}
     \end{center}
     %
-    When you now try all possible paths from an initial state to a final state, you'll see that they are exactly \emph{denaturalize}, \emph{denaturalization}, \emph{nature}, \emph{natural}, \emph{naturalize}, and \emph{naturalization}.
+    When you now try all possible paths from an initial state to a final state, you'll see that they are exactly
+    %
+    \begin{itemize}
+        \item \emph{nature},
+        \item \emph{natural},
+        \item \emph{naturalize},
+        \item \emph{denaturalize},
+        \item \emph{naturalization},
+        \item \emph{denaturalization}.
+    \end{itemize}
 \end{examplebox}
-%
+
 FSAs can be much more complex than this.
 As long as the number of states is finite, pretty much any graph you can imagine is an FSA\@.
 You can have multiple arcs leaving a node, multiple arcs leading to the same node, or arcs that lead back to a previous node, possibly even the one they came from (\emph{loops}).
@@ -237,40 +256,96 @@ That is to say, you can have convoluted automata like the one below:
     What collection of sentences is described by the automaton above?
 \end{homework}
 
+\section{Some Curious Limits of Language}
+
+Linguists put the parts that make up \emph{denaturalization} into three distinct groups:
+%
+\begin{description}
+    \item[stem] the base form, which can appear by itself; \emph{nature}
+    \item[prefix] a part that can only appear before a stem; \emph{de-}
+    \item[suffix] a part that can only appear after a stem; \emph{-al}, \emph{-ize}, \emph{-ation}
+\end{description}
+%
 \begin{homework}
+    Prefixes and suffixes can sometimes be iterated.
     Your grandfather's father is your \emph{great grandfather}, whose father is your \emph{great great grandfather}, whose father is your \emph{great great great grandfather}, and so on.
-    Try to write an FSA that captures all those patterns, and only those.
+    Try to write an FSA that produces \emph{grandfather}, \emph{great grandfather}, and so on.
+    You may analyze \emph{grandfather} as a stem.
 \end{homework}
 %
 \begin{homework}
     Of course we also have \emph{great grandmother}, \emph{great great grandmother}, and so on.
-    How should the automaton from the previous example be modified to also allow these words?
+    How could the automaton from the previous example be modified to also allow these words?
 \end{homework}
-%
-\begin{homework}
-    Obviously \emph{I like myself} is a sentence of English.
-    Somewhat less obviously, \emph{I like myself and myself} is also a sentence of English.
-    Imagine the following exchange:
 
-    \smallskip
-    \noindent
-    \textbf{Mary:} John, you're such a misanthropist.
-    Are there even two people that you like?\\
-    \smallskip
-    \textbf{John:} Sure! I like myself and myself.
-    
-    \smallskip
-    \noindent
-    If Mary asks for three people, John can sarcastically reply \emph{I like myself and myself and myself}, and so on for any number.
-    Write an FSA that allows all sentences of the form \emph{I like myself}, \emph{I like myself and myself}, \emph{I like myself and myself and myself}, and so on.
-    The automaton should not allow any other sentences.
+Those are not the only classes --- among other things there are also \emph{circumfixes}. 
+An example of a circumfix is German \emph{ge- -t}, which is used to form the participle form of a verb.
+So \emph{rauf-en} `brawl-to' can be turned into \emph{ge-rauf-t} `(has) brawled'.
+
+\medskip
+\begin{homework}
+    German actually has a split with respect to this circumfix.
+    For some verbs it is \emph{ge- -t}, for others it is \emph{ge- -en}.
+    And for some verbs, the form is irregular.
+    %
+    \begin{center}
+        \begin{tabular}{lll}
+            \toprule
+            \textbf{Verb stem}
+            &
+            \textbf{Infinitival form}
+            &
+            \textbf{Past participle form}\\
+            \midrule
+            lauf `run'& laufen & gelaufen\\
+            rauf `brawl' & raufen & gerauft\\
+            sauf `guzzle' & saufen & gesoffen\\
+            tauf `baptize' & taufen & getauft\\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    %
+    Write an FSA that produces all the correct infinitival and past participle forms, and only those.
+    Try to keep the number of states as small as possible.
 \end{homework}
+
+One would expect that languages can freely choose whether they use prefixes, suffixes or circumfixes.
+But this does not seem to be the case.
+What we find is that across languages, circumfixes do not seem to be iterable.
+%
+\begin{examplebox}[Saying `the day after tomorrow' in German and Ilocano]
+    German has a much simpler way than English to say `the day after tomorrow'.
+    You just take \emph{morgen} (the word for `tomorrow') and add the prefix \emph{über} `over'.
+    What makes this even nicer is that \emph{über} can be iterated.
+    %
+    \begin{enumerate}
+        \item morgen `tomorrow'
+        \item über-morgen `the day after tomorrow'
+        \item über-über-morgen `the day after the day after tomorrow'
+        \item \ldots
+    \end{enumerate}
+    %
+    Ilocano (an Austronesian language spoken on the Philippines) also has a single word for `the day after tomorrow', but it is built with the circumfix \emph{ka- -an} instead of a prefix.
+    %
+    \begin{enumerate}
+        \item bigat `tomorrow'
+        \item ka-bigat-an `the day after tomorrow'
+    \end{enumerate}
+    %
+    In contrast to German \emph{über-}, however, Ilocano \emph{ka- -an} cannot be freely iterated.
+    So you cannot say something like \emph{ka-ka-bigat-an-an}.
+\end{examplebox}
 %
 \begin{homework}
-    Pretty much any proper name of English can be substituted in the \emph{I like myself} sentences above.
-    If we ignore all proper names except \emph{John} and \emph{Mary}, then we can also get patterns like \emph{I like John}, \emph{I like Mary}, \emph{I like John and Mary}, \emph{I like myself and John}, \emph{I like myself and Mary and Mary}, and so on.
-    Modify the FSA from the previous exercise so that it also allows these patterns.
+    It is very easy to give an FSA for the German pattern --- it's just a variation of the \emph{great $\cdots$ great grandfather} pattern we saw before for English.
+    Similarly, an automaton for the Ilocano pattern is easy to come up with.
+    But what if Ilocano were also unbounded, so that we could also have words like \emph{ka-ka-ka-bigat-an-an-an}, i.e.\ words with the same number of \emph{ka-} prefixes and \emph{-an} suffixes.
+    Can you write an automaton for this?
 \end{homework}
+%
+The difference between German \emph{über-} and Ilocano \emph{ka- -an} is an interesting puzzle, and it is part of a much larger observation: prefixes and suffixes can be freely iterated, but circumfixes cannot.
+Why should languages work this way?
+FSAs provide an answer.
 
 
 \section{The Limits of Finite-State Automata (aka the Hard Part)}
@@ -281,14 +356,7 @@ Tons of technology uses FSAs, including language technology.
 
 But FSAs cannot do everything.
 There is a very strict bound on the complexity of the patterns they can handle.
-Remember that we noticed that
-%
-\begin{enumerate}
-    \item no language allows words or parts of words to be freely arranged, and
-    \item no language requires words to be linearly ordered by their length.
-\end{enumerate}
-%
-Both properties follow from a crucial limitation of FSAs, which is expressed by the \emph{Myhill Nerode Theorem}.
+And what we will see now is that even though FSAs can iterate prefixes and suffixes (as you've already shown yourself with the FSA for \emph{great $\cdots$ great grandfather}), they cannot correctly iterate circumfixes.
 
 Before we state the theorem, let us think about how FSAs actually work.
 In particular, what do the states stand for?
@@ -309,7 +377,7 @@ Suppose we have some pattern, and we compare all paths that could possibly arise
 We put two paths in the same bin if they can be continued in exactly the same fashion.
 Then the pattern can be handled by an FSA only if we end up with a finite number of distinct bins.
 %
-\begin{examplebox}
+\begin{examplebox}{Bins for the \emph{great $\cdots$ great grandfather} Pattern}
     Consider the pattern \emph{grandfather}, \emph{great grandfather}, \emph{great great grandfather}, and so on.
     If the pattern starts with \emph{grandfather}, then there is nothing else that can be added, so there are no continuation paths at all.
     For \emph{great}, one possible continuation path is \emph{grandfather}, producing \emph{great grandfather}.
@@ -337,69 +405,58 @@ Then the pattern can be handled by an FSA only if we end up with a finite number
     Since we only have two bins, the pattern can be handled by an FSA\@.
 \end{examplebox}
 
+The bins are essentially the states in the automaton: two strings are in the same bin because they take you to the same state in the automaton, and from there you can proceed in a specific manner irrespective of how you got there.
+But a finite-state automaton can only have a finite number of states, so it can only describe patterns where the number of distinct bins is finite.
+
 \begin{description}
     \item[Crucial Insight 2]
-    A pattern can be captured by an FSA only if its paths can be classified into finitely many bins.
+    A pattern can be captured by an FSA only if its paths can be grouped into finitely many bins.
 \end{description}
 
-The Myhill-Nerode theorem is simply a more precise formulation of these two insights.
-It allows us to explain the two properties of linguistic patterns we observed earlier.
+This insight allows us to show that unbounded circumfixation is impossible with FSAs.
+The proof is a joint class exercise.
+%
+% \begin{examplebox}{Bins for `tomorrow' Circumfixation in Ilocano}
+%     Suppose that the circumfix in Ilocano could be freely iterated, as long as the number of \emph{ka-} matches the number of \emph{-an}.
+%     Then we would have the following table:
+%     %
+%     \begin{center}
+%         \begin{tabular}{rl}
+%             \toprule
+%             \textbf{Incoming Path} & \textbf{Continuation Paths}\\
+%             \midrule
+%             bigat & ---\\
+%             \midrule
+%             ka & bigat an, ka bigat an an, ka ka bigat an an an, \ldots\\
+%             ka bigat & an\\
+%             ka bigat an & ---\\
+%             \midrule
+%             ka ka &  bigat an an, ka bigat an an an, \ldots\\
+%             ka ka bigat & an an\\
+%             ka ka bigat an & an\\
+%             ka ka bigat an an & ---\\
+%             \midrule
+%             ka ka ka & bigat an an an, ka bigat an an an an, \ldots\\
+%             ka ka ka bigat & an an an\\
+%             ka ka ka bigat an & an an\\
+%             ka ka ka bigtan an an & an\\
+%             $\vdots$
+%             \\
+%             \bottomrule
+%         \end{tabular}
+%     \end{center}
+%     %
+%     Some strings have the same continuation and thus end up in the same bin, e.g.~\emph{ka bigat} and \emph{ka ka bigat an}.
+%     But it is also very obvious that the strings \emph{ka}, \emph{ka ka}, \emph{ka ka ka}, and so on, all have different continuations.
+%     If the circumfix can be freely iterated, then there are infinitely many such strings, each one going in a different bin, so that there must be infinitely many bins.
+%     But then the pattern would also require infinitely many states, so it cannot be done with an FSA\@.
+% \end{examplebox}
 
-\begin{examplebox}[No Free Ordering]
-    Every language has sentences like English \emph{And John slept and Mary yawned and Bill cooked and \ldots}.
-    This is an FSA-pattern.
+\section{Wrapping Up}
 
-    If the words in these sentences could be freely arranged, this would give us many new sentences, including those where we first have all instances of \emph{and}, then the proper names, and then the \emph{verbs}.
-    We can once again analyze the paths in the form of a table.
-    For simplicity, let us represent all proper names as N and all verbs as V\@. 
-    %
-    \begin{center}
-        \begin{tabular}{rl}
-            \toprule
-            \textbf{Incoming Path} & \textbf{Continuation Paths}\\
-            \midrule
-            and & N V, and N N V V, \ldots\\
-            and and & N N V V, and N N N V V V, \ldots\\
-            and and and & N N N V V V, and N N N N V V V V\ldots
-            \\
-            \bottomrule
-        \end{tabular}
-    \end{center}
-    %
-    As you can see, no two rows in the table have the same continuation paths.
-    Since there is upper bound on how many instances of \emph{and} occur at the beginning of a sentence, we do not get a finite number of distinct bins for the path.
-    Hence this pattern cannot be created by any FSA, no matter how large and complicated it is.
-   
-    Any FSA that tries to produce this pattern will eventually make mistakes and end up with the wrong number of names or verbs, for instance, \emph{and and and John Mary slept yawned cooked ate}.
-    Changing the order of the words has made the original FSA-pattern too hard for FSAs.
-\end{examplebox}
-
-\begin{examplebox}[No Ordering by Length]
-    Now suppose that we want to order the words in a sentence by length.
-    We already saw that English contains the words \emph{grandfather}, \emph{great grandfather}, \emph{great great grandfather}, and so on.
-    Even though these are spelled as separated words, one can show that each one is actually one large word.
-    For the sake of clarity, let us use an underscore instead of space for these words.
-    Among the sentences of English, we find the pattern \emph{My grandfather likes his great\_grandfather}, \emph{My great\_grandfather likes his great\_great\_grandfather}, and so on.
-    Ordered by lengths, these sentences would be \emph{my his likes grandfather great\_grandfather}, \emph{my his likes great\_grandfather great\_great\_grandfather}, \ldots
-
-    Once again we draw a table to compare the paths.
-    We skip the paths \emph{my}, \emph{my his}, and \emph{my his likes}, as they do not matter for the argument.
-    %
-    \begin{center}
-        \begin{tabular}{rl}
-            \toprule
-            \textbf{Incoming Path} & \textbf{Continuation Paths}\\
-            \midrule
-            my his likes grandfather & great\_grandfather\\
-            my his likes great\_grandfather & great\_great\_grandfather\\
-            my his likes great\_great\_grandfather & great\_great\_great\_grandfather\\
-            \bottomrule
-        \end{tabular}
-    \end{center}
-    %
-    We have the same problem as before: each row has different continuation paths, so we end up with infinitely many bins and the pattern cannot be captured by an FSA\@.
-    Any attempt to model the pattern with an FSA will also produce sentences of the form \emph{my his likes great$^n$ grandfather great$^m$ grandfather}, $m < n$.
-\end{examplebox}
+The iterability difference between prefixes and suffixes on the one hand and circumfixes on the other is really puzzling from non-mathematical perspective.
+But once we look at them from a mathematical perspective, we see that there is a huge complexity difference: FSAs can iterate prefixes and suffixes, but not circumfixes.
+So if the mechanisms our brain uses to handle word structure are similar to FSAs, then it is not surprising that circumfixes are never iterated in any languages --- the relevant mechanisms simply cannot do it!
 
 We have accomplished something that few people would consider possible: we have studied language from a mathematical perspective, and we were able to explain properties that are shared by all human languages by purely mathematical means.
 
@@ -421,20 +478,22 @@ We have accomplished something that few people would consider possible: we have 
         \begin{itemize}
             \item A man left.
             \item A man that a woman saw left.
-            \item A man that a woman that a man saw saw left.
+            \item A man that a woman that a woman saw saw left.
+            \item A man that a woman that a woman that a woman saw saw saw left.
         \end{itemize}
 \end{homework}
 
 \section{I Wanna Learn More!}
 
 Cool, here's a few pointers.
-If you have any questions, just shoot me a line!
+I am also working on an interactive learning platform that teaches mathematical techniques for linguistics, and \textbf{\textcolor{Red3}{I am looking for volunteers}} to test it and provide feedback.
+If you are interested, or if you have any questions on today's material, shoot me a line: \href{mailto:mail@thomasgraf.net}{mail@thomasgraf.net}
 
 \begin{itemize}
     \item \textbf{Automata Theory}
         \begin{itemize}
             \item \emph{Introduction to the Theory of Computation}\\
-                undergraduate, computer science
+                undergraduate course at Stony Brook, Computer Science
             \item Michael Sipser. 2012. 3rd edition.\\
                 \emph{Introduction to the Theory of Computation}. (yep, that's the same name)
 
@@ -444,13 +503,14 @@ If you have any questions, just shoot me a line!
         \end{itemize}
     \item \textbf{Computational Linguistics}
         \begin{itemize}
+            \item \emph{North American Computational Linguistics Olympiad}\\
+                we have training sessions at Stony Brook
             \item \emph{Language and Technology}\\
-                undergraduate, linguistics
+                undergraduate course at Stony Brook, Linguistics
             \item \emph{Computational Linguistics}\\
-                undergraduate, linguistics
+                undergraduate course at Stony Brook, Linguistics
             \item \emph{Natural Language Processing}\\
-                undergraduate, computer science
-            \item over 10 graduate-level courses
+                undergraduate course at Stony Brook, Computer Science
             \item Markus Dickinson, Chris Brew, and Detmar Meurers. 2012.\\
                 \emph{Language and Computers}.
 
@@ -459,7 +519,7 @@ If you have any questions, just shoot me a line!
         \end{itemize}
     \item \textbf{Language from a Formal and Cognitive Perspective}
         \begin{itemize}
-            \item Lecture notes for my graduate-level course Computational Linguistics: \href{http://lin637.thomasgraf.net}{lin637.thomasgraf.net}
+            \item Check out my website, teaching materials can be found under \emph{Students}
             \item Steven Pinker. \emph{The Language Instinct: How the Mind Creates Language}.
         \end{itemize}
     \item \textbf{The Human Mind as a Computer}
@@ -467,3 +527,40 @@ If you have any questions, just shoot me a line!
             \item Douglas Hofstadter. \emph{Gödel, Escher, Bach: An Eternal Golden Braid}.
         \end{itemize}
 \end{itemize}
+
+\clearpage
+\section*{Group Exercise}
+\thispagestyle{empty}
+\noindent
+The Ilocano pattern is:
+%
+\begin{center}
+    \begin{tabular}{rcl}
+        ka & bigat & an\\
+        kaka & bigat & anan\\
+        kakaka& bigat & ananan\\
+        kakakaka& bigat & anananan\\
+        & $\vdots$\\
+    \end{tabular}
+\end{center}
+%
+We can write this more succinctly as $\text{ka}^n\ \text{bigat}\ \text{an}^n$ ($n \geq 0$).
+
+\noindent
+Suppose the word has already started with the following string:
+
+\vspace{6em}
+
+\noindent
+What are the possible continuation paths?
+
+\begin{example}
+    If the word starts with \emph{ka}, the continuation paths are
+    %
+    \begin{itemize}
+        \item bigat an,
+        \item ka bigat an an,
+        \item ka ka bigat an an an,
+        \item $\ldots$
+    \end{itemize}
+\end{example}
