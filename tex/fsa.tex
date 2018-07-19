@@ -12,7 +12,7 @@
     \end{tabular}
 }
 
-\section{Language as a Mathematical Problem}
+\section{Language as a mathematical problem}
 
 Every language follows certain rules of grammar.
 I do not mean the usual grammar-nazi malarkey like ``Do not split infinitives! Do not strand prepositions!''.
@@ -77,7 +77,7 @@ But research in \emph{neurolinguistics} has shown that this approach won't get u
 Instead, we need a more abstract model of these brain mechanisms.
 And math allows us to do just that!
 
-\section{Graphs for Language: Finite-State Automata}
+\section{Graphs for language: Finite-state automata}
 
 Our mathematical model are \emph{finite-state automata} (FSA), which are a special case of labeled graphs.
 Here is a simple example of an automaton representing \emph{denaturalization}:
@@ -256,7 +256,7 @@ That is to say, you can have convoluted automata like the one below:
     What collection of sentences is described by the automaton above?
 \end{homework}
 
-\section{Some Curious Limits of Language}
+\section{Some curious limits of language}
 
 Linguists put the parts that make up \emph{denaturalization} into three distinct groups:
 %
@@ -348,7 +348,7 @@ Why should languages work this way?
 FSAs provide an answer.
 
 
-\section{The Limits of Finite-State Automata (aka the Hard Part)}
+\section{The limits of finite-state automata (aka the hard part)}
 
 FSAs are fairly powerful devices, and they have found many applications in the real world.
 They control elevators, help biologists with genome sequencing, give you word suggestions when you write a text message, and are even involved in the automatic creation of subtitles for Youtube videos.
@@ -452,7 +452,7 @@ The proof is a joint class exercise.
 %     But then the pattern would also require infinitely many states, so it cannot be done with an FSA\@.
 % \end{examplebox}
 
-\section{Wrapping Up}
+\section{Wrapping up}
 
 The iterability difference between prefixes and suffixes on the one hand and circumfixes on the other is really puzzling from non-mathematical perspective.
 But once we look at them from a mathematical perspective, we see that there is a huge complexity difference: FSAs can iterate prefixes and suffixes, but not circumfixes.
@@ -482,85 +482,3 @@ We have accomplished something that few people would consider possible: we have 
             \item A man that a woman that a woman that a woman saw saw saw left.
         \end{itemize}
 \end{homework}
-
-\section{I Wanna Learn More!}
-
-Cool, here's a few pointers.
-I am also working on an interactive learning platform that teaches mathematical techniques for linguistics, and \textbf{\textcolor{Red3}{I am looking for volunteers}} to test it and provide feedback.
-If you are interested, or if you have any questions on today's material, shoot me a line: \href{mailto:mail@thomasgraf.net}{mail@thomasgraf.net}
-
-\begin{itemize}
-    \item \textbf{Automata Theory}
-        \begin{itemize}
-            \item \emph{Introduction to the Theory of Computation}\\
-                undergraduate course at Stony Brook, Computer Science
-            \item Michael Sipser. 2012. 3rd edition.\\
-                \emph{Introduction to the Theory of Computation}. (yep, that's the same name)
-
-                \smallskip
-                \emph{Pro tip:} The 2nd edition is almost the same and used copies are much cheaper.
-                A decent scan can easily be found on the first Google page, I'm not sure about its legality.
-        \end{itemize}
-    \item \textbf{Computational Linguistics}
-        \begin{itemize}
-            \item \emph{North American Computational Linguistics Olympiad}\\
-                we have training sessions at Stony Brook
-            \item \emph{Language and Technology}\\
-                undergraduate course at Stony Brook, Linguistics
-            \item \emph{Computational Linguistics}\\
-                undergraduate course at Stony Brook, Linguistics
-            \item \emph{Natural Language Processing}\\
-                undergraduate course at Stony Brook, Computer Science
-            \item Markus Dickinson, Chris Brew, and Detmar Meurers. 2012.\\
-                \emph{Language and Computers}.
-
-                \smallskip
-                Used copies are available for 10 bucks on Amazon.
-        \end{itemize}
-    \item \textbf{Language from a Formal and Cognitive Perspective}
-        \begin{itemize}
-            \item Check out my website, teaching materials can be found under \emph{Students}
-            \item Steven Pinker. \emph{The Language Instinct: How the Mind Creates Language}.
-        \end{itemize}
-    \item \textbf{The Human Mind as a Computer}
-        \begin{itemize}
-            \item Douglas Hofstadter. \emph{Gödel, Escher, Bach: An Eternal Golden Braid}.
-        \end{itemize}
-\end{itemize}
-
-\clearpage
-\section*{Group Exercise}
-\thispagestyle{empty}
-\noindent
-The Ilocano pattern is:
-%
-\begin{center}
-    \begin{tabular}{rcl}
-        ka & bigat & an\\
-        kaka & bigat & anan\\
-        kakaka& bigat & ananan\\
-        kakakaka& bigat & anananan\\
-        & $\vdots$\\
-    \end{tabular}
-\end{center}
-%
-We can write this more succinctly as $\text{ka}^n\ \text{bigat}\ \text{an}^n$ ($n \geq 0$).
-
-\noindent
-Suppose the word has already started with the following string:
-
-\vspace{6em}
-
-\noindent
-What are the possible continuation paths?
-
-\begin{example}
-    If the word starts with \emph{ka}, the continuation paths are
-    %
-    \begin{itemize}
-        \item bigat an,
-        \item ka bigat an an,
-        \item ka ka bigat an an an,
-        \item $\ldots$
-    \end{itemize}
-\end{example}

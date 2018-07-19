@@ -1,0 +1,35 @@
+\section*{Group Exercise}
+\thispagestyle{empty}
+\noindent
+The Ilocano pattern is:
+%
+\begin{center}
+    \begin{tabular}{rcl}
+        ka & bigat & an\\
+        kaka & bigat & anan\\
+        kakaka& bigat & ananan\\
+        kakakaka& bigat & anananan\\
+        & $\vdots$\\
+    \end{tabular}
+\end{center}
+%
+We can write this more succinctly as $\text{ka}^n\ \text{bigat}\ \text{an}^n$ ($n \geq 0$).
+
+\noindent
+Suppose the word has already started with the following string:
+
+\vspace{6em}
+
+\noindent
+What are the possible continuation paths?
+
+\begin{example}
+    If the word starts with \emph{ka}, the continuation paths are
+    %
+    \begin{itemize}
+        \item bigat an,
+        \item ka bigat an an,
+        \item ka ka bigat an an an,
+        \item $\ldots$
+    \end{itemize}
+\end{example}
