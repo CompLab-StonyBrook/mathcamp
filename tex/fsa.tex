@@ -178,7 +178,7 @@ But automata can have multiple paths through them.
     \end{center}
     
     But this automaton is too general, it also allows patterns like \emph{denature} or \emph{denatural}.
-    This is a little tricker to fix: we add a few more states to keep track of the fact that after \emph{de}, the first final state can only be one reached by \emph{ize}.
+    This is a little trickier to fix: we add a few more states to keep track of the fact that after \emph{de}, the first final state can only be one reached by \emph{ize}.
     %
     \begin{center}
         \begin{tikzpicture}
@@ -325,7 +325,7 @@ What we find is that across languages, circumfixes do not seem to be iterable.
         \item \ldots
     \end{enumerate}
     %
-    Ilocano (an Austronesian language spoken on the Philippines) also has a single word for `the day after tomorrow', but it is built with the circumfix \emph{ka- -an} instead of a prefix.
+    Ilocano (an Austronesian language spoken in the Philippines) also has a single word for `the day after tomorrow', but it is built with the circumfix \emph{ka- -an} instead of a prefix.
     %
     \begin{enumerate}
         \item bigat `tomorrow'
@@ -377,7 +377,7 @@ Suppose we have some pattern, and we compare all paths that could possibly arise
 We put two paths in the same bin if they can be continued in exactly the same fashion.
 Then the pattern can be handled by an FSA only if we end up with a finite number of distinct bins.
 %
-\begin{examplebox}{Bins for the \emph{great $\cdots$ great grandfather} Pattern}
+\begin{examplebox}[Bins for the \emph{great $\cdots$ great grandfather} Pattern]
     Consider the pattern \emph{grandfather}, \emph{great grandfather}, \emph{great great grandfather}, and so on.
     If the pattern starts with \emph{grandfather}, then there is nothing else that can be added, so there are no continuation paths at all.
     For \emph{great}, one possible continuation path is \emph{grandfather}, producing \emph{great grandfather}.
